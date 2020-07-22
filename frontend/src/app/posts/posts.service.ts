@@ -37,7 +37,8 @@ export class PostsService {
 
   addPosts(title: string, content: string): void {
     const post: Post = {id: null, title, content};
-    this.http.post<{message: string, postId: string}>('http://localhost:4201/api/posts', post)
+    this.http
+      .post<{message: string, postId: string}>('http://localhost:4201/api/posts', post)
       .subscribe((res) => {
         post.id = res.postId;
         this.posts.push(post);
@@ -46,9 +47,28 @@ export class PostsService {
   }
 
   deletePost(postId: string): void {
-    this.http.delete('http://localhost:4201/api/posts/' + postId)
+    this.http
+      .delete('http://localhost:4201/api/posts/' + postId)
       .subscribe(() => {
         this.posts = this.posts.filter(post => post.id !== postId);
+        this.postsUpdated.next([...this.posts]);
+      });
+  }
+
+  getPost(id: string) {
+    return this.http.get<{_id: string, title: string, content: string}>(
+      'http://localhost:4201/api/posts/' + id);
+  }
+
+  updatePost(id: string, title: string, content: string): void {
+    const post: Post = {id, title, content};
+    this.http
+      .put('http://localhost:4201/api/posts/' + id, post)
+      .subscribe(res => {
+        const updatedPosts = [...this.posts];
+        const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
+        updatedPosts[oldPostIndex] = post;
+        this.posts = updatedPosts;
         this.postsUpdated.next([...this.posts]);
       });
   }
