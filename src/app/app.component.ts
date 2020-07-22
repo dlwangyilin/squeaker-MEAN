@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'first-angular';
+  storedPosts = [];
+
+  onPostAdded(post): void {
+    this.storedPosts.push(post);
+  }
 }
