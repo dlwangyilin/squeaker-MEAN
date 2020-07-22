@@ -1,8 +1,21 @@
 const express = require('express');
+const cors = require("cors");
+const bodyParser = require('body-parser');
 
 const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
-app.use('/api/posts', (req, res, next) => {
+app.post("/api/posts", (req, res, next) => {
+    const post = req.body;
+    console.log(post);
+    res.status(201).json({
+        message: "post added successfully"
+    });
+});
+
+app.get('/api/posts', (req, res, next) => {
     const posts = [
         {
             id: 'fasdae',
