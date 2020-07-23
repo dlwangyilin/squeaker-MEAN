@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require('body-parser');
 const Post = require('./models/post');
 const mongoose = require('mongoose');
+const postsRoutes = require("./routes/posts");
 
 const app = express();
 mongoose.set("debug", true);
@@ -19,65 +20,5 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.get("/api/posts/:id", (req, res, next) => {
-    Post.findById(req.params.id)
-        .then( post => {
-            if (post) {
-                res.status(200).json(post);
-            } else {
-                res.status(404).json({message: 'Post not found'});
-            }
-        })
-});
-
-app.post("/api/posts", (req, res, next) => {
-    const post = new Post({
-        title: req.body.title,
-        content: req.body.content
-    });
-    post.save()
-        .then((result) => {
-            res.status(201).json({
-                message: "post added successfully",
-                postId: result._id
-            });
-        })
-        .catch(() => {
-            console.log("save fails");
-        });
-});
-
-app.put('/api/posts/:id', (req, res, next) => {
-    const post = new Post({
-        _id: req.body.id,
-        title: req.body.title,
-        content: req.body.content
-    });
-    Post.updateOne({_id: req.params.id}, post)
-        .then((res) => {
-            console.log(res);
-
-        });
-});
-
-app.get('/api/posts', (req, res, next) => {
-    Post.find()
-        .then((documents) => {
-            res.status(200).json({
-                messages: 'Posts fetched successfully',
-                posts: documents
-            });
-        });
-});
-
-app.delete('/api/posts/:id', (req, res, next) => {
-    Post.deleteOne({_id: req.params.id})
-        .then((result) => {
-            console.log(result);
-            res.status(200).json({
-                message: `Post ${req.params.id} is deleted!`
-            });
-        });
-
-})
+app.use("/api/posts", postsRoutes);
 module.exports = app;
