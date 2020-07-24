@@ -13,6 +13,10 @@
         #title="ngModel">
       <mat-error *ngIf="title.invalid">Please input a title</mat-error>
     </mat-form-field>
+    <div>
+      <button mat-stroked-button (click)="filePicker.click()">Pick Image</button>
+      <input type="file" #filePicker>
+    </div>
     <mat-form-field>
       <textarea matInput rows="6"
       name="content"
