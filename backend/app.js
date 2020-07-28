@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const Post = require('./models/post');
 const mongoose = require('mongoose');
 const postsRoutes = require("./routes/posts");
+const path = require('path');
 
 const app = express();
 mongoose.set("debug", true);
@@ -18,7 +19,8 @@ mongoose.connect(`mongodb+srv://admin:${process.env.MONGO_PASSWORD}@cluster0.ace
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use("/images", express.static(path.join("images")));
 
 app.use("/api/posts", postsRoutes);
 module.exports = app;
