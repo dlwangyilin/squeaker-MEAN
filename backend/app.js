@@ -10,7 +10,7 @@ const path = require('path');
 
 const app = express();
 mongoose.set("debug", true);
-mongoose.connect(`mongodb+srv://admin:${process.env.MONGO_PASSWORD}@cluster0.aceuo.mongodb.net/post?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb+srv://admin:${process.env.MONGO_PASSWORD}@cluster0.aceuo.mongodb.net/post?w=majority`)
     .then(() => {
         console.log("Connected to Mongo Atlas");
     })
