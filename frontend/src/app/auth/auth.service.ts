@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuthData} from './auth-data';
 import {Subject} from 'rxjs';
-import {falseIfMissing} from 'protractor/built/util';
 import {Router} from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
@@ -24,7 +23,9 @@ export class AuthService {
     };
     this.http.post('http://localhost:4201/api/user/signup', authData)
       .subscribe(response => {
-        console.log(response);
+        this.router.navigate(['/']);
+      }, error => {
+        this.authStatusListener.next(false);
       });
   }
 
@@ -47,6 +48,8 @@ export class AuthService {
           this.saveAuthData(this.token, expire, this.userId);
           this.router.navigate(['/']);
         }
+      }, error => {
+        this.authStatusListener.next(false);
       });
   }
 
